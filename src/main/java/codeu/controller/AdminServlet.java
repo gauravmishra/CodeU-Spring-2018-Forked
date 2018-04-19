@@ -15,12 +15,15 @@
 package codeu.controller;
 
 import codeu.model.data.User;
+import codeu.model.data.Conversation;
 import codeu.model.store.basic.AdminStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.ConversationStore;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminServlet extends HttpServlet {
 
   private AdminStore adminStore;
+  private UserStore userStore;
+  private ConversationStore conversationStore;
 
   /**
    * Set up state for handling admin-related requests. This method is only called when running in a
@@ -40,10 +45,20 @@ public class AdminServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
     setAdminStore(AdminStore.getInstance()); // Important for Unit Tests!
+    setUserStore(UserStore.getInstance());
+    setConversationStore(ConversationStore.getInstance());
   }
   
   public void setAdminStore(AdminStore adminStore) {
     this.adminStore = adminStore;
+  }
+  
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+  
+  public void setConversationStore(ConversationStore conversationStore) {
+    this.conversationStore = conversationStore;
   }
 
   /**
@@ -68,7 +83,10 @@ public class AdminServlet extends HttpServlet {
 
     if (adminStore.checkPassword(password)) {
       // Build admin page and return to View.
-      request.setAttribute("message", "Come back soon for Admin Page!!!");
+      List<Conversation> allConversations = conversationStore.getAllConversations();
+      List<User> allUsers = userStore.getAllUsers();
+      request.setAttribute("conversations", allConversations);
+      request.setAttribute("users", allUsers);
     } else {
       request.setAttribute("error", "Invalid Admin password.");
     }
