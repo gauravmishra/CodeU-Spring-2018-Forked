@@ -29,9 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet class responsible for the admin page. */
 public class AdminServlet extends HttpServlet {
 
-  /** Store class that gives access to Users. */
-  private UserStore userStore;
-
   /**
    * This function fires when a user requests the /admin URL. It simply forwards the request to
    * admin.jsp.
