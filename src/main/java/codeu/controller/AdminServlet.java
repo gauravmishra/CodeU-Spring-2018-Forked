@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet class responsible for the admin page. */
-public class LoginServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
 
   /** Store class that gives access to Users. */
   private UserStore userStore;
