@@ -75,6 +75,10 @@
  	<servlet-name>RegisterServlet</servlet-name>
  	<url-pattern>/register</url-pattern>
   </servlet-mapping>
-
+  
+  <servlet-mapping>
+      <servlet-name>AdminServlet</servlet-name>
+      <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
 
 </web-app>
