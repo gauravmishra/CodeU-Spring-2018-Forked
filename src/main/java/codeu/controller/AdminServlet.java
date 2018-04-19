@@ -15,6 +15,7 @@
 package codeu.controller;
 
 import codeu.model.data.User;
+import codeu.model.store.basic.AdminStore;
 import codeu.model.store.basic.UserStore;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -29,6 +30,22 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet class responsible for the admin page. */
 public class AdminServlet extends HttpServlet {
 
+  private AdminStore adminStore;
+
+  /**
+   * Set up state for handling admin-related requests. This method is only called when running in a
+   * server, not when running in a test.
+   */
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    setAdminStore(AdminStore.getInstance()); // Important for Unit Tests!
+  }
+  
+  public void setAdminStore(AdminStore adminStore) {
+    this.adminStore = adminStore;
+  }
+
   /**
    * This function fires when a user requests the /admin URL. It simply forwards the request to
    * admin.jsp.
@@ -36,6 +53,26 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+  }
+
+  /**
+   * This function fires when a user submits the admin password form. It gets the password from
+   * the submitted form data, checks that it's valid, and either shows the user the admin page
+   * or shows an error to the user.
+   */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    String password = request.getParameter("password");
+
+    if (adminStore.checkPassword(password)) {
+      // Build admin page and return to View.
+      request.setAttribute("message", "Come back soon for Admin Page!!!");
+    } else {
+      request.setAttribute("error", "Invalid Admin password.");
+    }
+    
     request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
   }
 }

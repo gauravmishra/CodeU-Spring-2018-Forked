@@ -35,7 +35,21 @@
   <div id="container">
     <h1>Admin</h1>
 
-    <p> Admin Page Under Construction. </p>
+    <% if(request.getAttribute("error") != null){ %>
+        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+    <% } %>
+
+    <% if(request.getAttribute("message") != null){ %>
+    <h2 style="color:blue"><%= request.getAttribute("message") %></h2>
+    <% } %>
+
+    <form action="/admin" method="POST">
+    <label for="password">Admin Password: </label>
+    <input type="password" name="password" id="password">
+    <br/><br/>
+    <button type="submit">Submit</button>
+    </form>
+
   </div>
 </body>
 </html>
