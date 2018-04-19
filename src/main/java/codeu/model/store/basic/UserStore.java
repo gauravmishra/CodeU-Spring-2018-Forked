@@ -113,6 +113,11 @@ public class UserStore {
     }
     return false;
   }
+  
+  /** Get all users for Admin page. */
+  public List<User> getAllUsers() {
+    return users;
+  }
 
   /**
    * Sets the List of Users stored by this UserStore. This should only be called once, when the data

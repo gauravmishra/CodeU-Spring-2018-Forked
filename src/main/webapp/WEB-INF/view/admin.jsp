@@ -13,6 +13,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --%>
+<%@ page import="java.util.List" %>
+<%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.data.User" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,11 +28,8 @@
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <a href="/conversations">Conversations</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-    <% } else{ %>
-      <a href="/login">Login</a>
-    <% } %>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
     <a href="/about.jsp">About</a>
   </nav>
 
@@ -39,16 +40,71 @@
         <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <% if(request.getAttribute("message") != null){ %>
-    <h2 style="color:blue"><%= request.getAttribute("message") %></h2>
-    <% } %>
+    <% if(request.getAttribute("conversations") != null){ %>
 
-    <form action="/admin" method="POST">
-    <label for="password">Admin Password: </label>
-    <input type="password" name="password" id="password">
-    <br/><br/>
-    <button type="submit">Submit</button>
-    </form>
+    <h1>Conversations</h1>
+
+    <%
+    List<Conversation> conversations =
+      (List<Conversation>) request.getAttribute("conversations");
+    if(conversations == null || conversations.isEmpty()){
+    %>
+      <h2 style="color:red">No Conversations in Chatty :(</h2>
+    <%
+    }
+    else{
+    %>
+      <ul class="mdl-list">
+    <%
+      for(Conversation conversation : conversations){
+    %>
+      <li><a href="/chat/<%= conversation.getTitle() %>">
+        <%= conversation.getTitle() %></a></li>
+    <%
+      }
+    %>
+      </ul>
+    <%
+    }
+    %>
+    <hr/>
+
+
+    <h1>Users</h1>
+
+    <%
+    List<User> users =
+      (List<User>) request.getAttribute("users");
+    if(users == null || users.isEmpty()){
+    %>
+      <h2 style="color:red">No Users in Chatty :(</h2>
+    <%
+    }
+    else{
+    %>
+      <ul class="mdl-list">
+    <%
+      for(User user : users){
+    %>
+      <li><%= user.getName() %></li>
+    <%
+      }
+    %>
+      </ul>
+    <%
+    }
+    %>
+    <hr/>
+
+    <% }
+    else { %>
+      <form action="/admin" method="POST">
+      <label for="password">Admin Password: </label>
+      <input type="password" name="password" id="password">
+      <br/><br/>
+      <button type="submit">Submit</button>
+      </form>
+    <% } %>
 
   </div>
 </body>
